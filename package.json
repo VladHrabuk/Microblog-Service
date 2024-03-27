@@ -10,7 +10,8 @@
     "format:fix": "npx prettier . --write",
     "prepare": "husky install",
     "start:server": "nodemon .",
-    "debug:server": "nodemon --inspect ."
+    "debug:server": "nodemon --inspect .",
+    "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
   },
   "repository": {
     "type": "git",
@@ -27,11 +28,21 @@
     "eslint-config-semistandard": "^17.0.0",
     "husky": "^8.0.3",
     "nodemon": "^3.1.0",
-    "prettier": "3.2.5"
+    "prettier": "3.2.5",
+    "prisma": "^5.11.0",
+    "tailwindcss": "^3.4.1"
   },
   "dependencies": {
+    "@prisma/client": "^5.11.0",
+    "bcrypt": "^5.1.1",
     "config": "^3.3.11",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.18.3"
+    "ejs": "^3.1.9",
+    "express": "^4.18.3",
+    "express-ejs-layouts": "^2.5.1",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2"
   }
 }

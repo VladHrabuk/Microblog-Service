@@ -21,5 +21,7 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single'],
+    'comma-dangle': 'off',
+    'space-before-function-paren': 'off',
   },
 };

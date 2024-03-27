@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> ExploreX | <%= locals.pageTitle %>
+    </title>
+    <link href="./css/output.css" rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <section class="text-gray-600 body-font">
+            <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
+                <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
+                    <h1 class="title-font font-medium text-3xl text-gray-900">ExploreX Blog</h1>
+                    <p class="leading-relaxed mt-4">As a vibrant hub for travel enthusiasts, ExploreX Blog invites you
+                        to embark on a journey of exploration and discovery.</p>
+                </div>
+                <form action="/sign-in" method="POST"
+                    class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+                    <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Sign In</h2>
+
+
+                    <div class="relative mb-4">
+                        <label for="username" class="leading-7 text-sm text-gray-600">Username</label>
+                        <input type="text" id="username" name="username"
+                            value="<%= locals.formData && locals.formData.username || '' %>"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <% if (typeof errors !=='undefined' && errors.username ) { %>
+                            <span class="text-red-400">
+                                <%= errors.username.msg %>
+                            </span>
+                            <% } %>
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
+                        <input type="password" id="password" name="password"
+                            value="<%= locals.formData && locals.formData.password || '' %>"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                        <% if (typeof errors !=='undefined' && errors.password ) { %>
+                            <span class="text-red-400">
+                                <%= errors.password.msg %>
+                            </span>
+                            <% } %>
+                    </div>
+                    <button type="submit"
+                        class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Sign
+                        in to your account</button>
+                    <p class="text-sm text-gray-500 mt-5">Don’t have an account yet? <a
+                            class="text-blue-500 font-bold text-sm" href="/sign-up">Sign
+                            up here</a></p>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
