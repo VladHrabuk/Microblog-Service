@@ -1,19 +1,20 @@
 require('dotenv').config();
 const config = require('config');
 const express = require('express');
+const cors = require('cors');
 const expressLayouts = require('express-ejs-layouts');
-const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const { router: pageRouter } = require('./routes/pages');
+const { jwtParser } = require('./middleware/auth');
 
 const server = express();
 
-mongoose.connect(process.env.DB_URL);
-const db = mongoose.connection;
-db.on('error', (error) => console.log(error));
-db.once('open', () => console.log('Connected to the database!'));
-
+server.use(cors());
+server.use(cookieParser());
+server.use(express.urlencoded({ extended: false }));
 server.use(express.static('public'));
 server.use(express.json());
+server.use(jwtParser);
 server.use(expressLayouts);
 server.set('layout', './layouts/main');
 server.set('view engine', 'ejs');
