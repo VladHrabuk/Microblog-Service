@@ -1,1 +1,71 @@
-Index
+<section class="text-gray-600 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="-my-8 divide-y-2 divide-gray-100">
+            <% locals.posts.forEach(post=> { %>
+                <div class="py-8 flex flex-wrap md:flex-nowrap">
+                    <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                        <span class="font-semibold title-font text-gray-700">POSTED</span>
+                        <span class="mt-1 text-gray-500 text-sm">
+                            <%= new Date(post.createdAt).toLocaleDateString('en-US', { day: 'numeric' , month: 'long' ,
+                                year: 'numeric' }) %>
+                                <%= new Date(post.createdAt).toLocaleTimeString('en-US', { hour: '2-digit' ,
+                                    minute: '2-digit' }) %>
+                        </span>
+                    </div>
+                    <div class="md:flex-grow">
+                        <h2 class="text-2xl font-medium text-gray-900 title-font">
+                            <%= post.title %>
+                        </h2>
+                        <%if(locals.userId===-1) {%>
+                            <p class="leading-relaxed">By <span class="font-bold">@<%= post.author.username %>
+                                </span>
+                            </p>
+                            <%}%>
+                                <p class="leading-relaxed">
+                                    Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up
+                                    snackwave ramps
+                                    cornhole. Marfa 3 wolf moon
+                                    party messenger bag selfies, poke vaporware kombucha lumbersexual pork belly
+                                    polaroid hoodie
+                                    portland craft beer.
+                                    <%= post.content.slice(0, ) %>...
+                                </p>
+                                <a href="/posts/<%=post.id%>" class="text-indigo-500 inline-flex items-center mt-4">Read
+                                    More
+                                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12h14"></path>
+                                        <path d="M12 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
+        <% if(locals.pageTitle==='Travel Blog' ) { %>
+            <div class="flex items-center justify-between">
+                <p class="text-sm text-gray-700">
+                    Showing <%= Math.min((locals.page - 1) * locals.limit + 1, locals.totalCount) %> to
+                        <%= Math.min(locals.page * locals.limit, locals.totalCount) %> of <%= locals.totalCount %> Posts
+                </p>
+                <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <a href="<%= `/home?page=${Math.max(1, locals.page - 1)}&limit=${locals.limit}` %>"
+                        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                        <%=locals.page===1 ? 'disabled' : '' %>>Previous
+                    </a>
+                    <% const startPage=Math.max(1, locals.page - 1); %>
+                        <% const endPage=Math.min(locals.totalPages, startPage + 2); %>
+                            <% for(let i=startPage; i <=endPage; i++) { %>
+                                <a href="<%= `/home?page=${i}&limit=${locals.limit}` %>"
+                                    class="relative inline-flex items-center <%= locals.page === i ? 'bg-indigo-600 text-white' : 'text-gray-900' %> px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                                    <%= i %>
+                                </a>
+                                <% } %>
+                                    <a href="<%= `/home?page=${Math.min(locals.totalPages, locals.page + 1)}&limit=${locals.limit}` %>"
+                                        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                        <%=locals.page===locals.totalPages ? 'disabled' : '' %>>Next
+                                    </a>
+                </nav>
+            </div>
+            <%}%>
+</section>

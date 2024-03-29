@@ -23,7 +23,7 @@ model Post {
   content String
   createdAt DateTime @default(now())
   lastEditedAt DateTime? @updatedAt
-  edited Boolean
+  edited Boolean @default(false)
   author User @relation(fields: [authorId], references: [id])
   authorId String @db.ObjectId
   comments Comment[]

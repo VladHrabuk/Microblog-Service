@@ -1,27 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const { findUser, addNewUser } = require('../controllers/userController');
+const postController = require('../controllers/postController');
 const { hashPassword, checkPassword } = require('../utils/auth');
-const { protectedRoute, tokenSession } = require('../middleware/auth');
+const { protectedRoute, tokenSession, getAccountUsername } = require('../middleware/auth');
 const { SignInErrorHandler, validateSignUpForm } = require('../middleware/userValidate');
 
-// Unauthorized users
-router.get('/', async (req, res, next) => {
-  const locals = { pageTitle: 'Travel Blog' };
+// Authorized/Unauthorized user - main page with all posts
+router.get('/home', getAccountUsername, async (req, res, next) => {
+  const { userId = -1 } = req._auth;
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = 4;
+  const { posts, totalCount } = await postController.paginationPosts(req, page, limit);
+  const totalPages = Math.ceil(totalCount / limit);
+  const locals = { pageTitle: 'Travel Blog', userId, posts, ...req.locals, page, limit, totalPages, totalCount };
   res.render('index', { locals });
 });
 
-// Authorized user - main page with all posts
-router.get('/home', protectedRoute, async (req, res, next) => {
-  const { userId = -1 } = req._auth;
-  const locals = { pageTitle: 'Home', userId };
-  res.render('home', { locals });
-});
-
 // Authorized user - additional page with user's own posts
-router.get('/posts', protectedRoute, async (req, res, next) => {
-  const locals = { pageTitle: 'Posts' };
-  res.render('posts', { locals, layout: false });
+router.get('/posts', getAccountUsername, protectedRoute, async (req, res, next) => {
+  const { userId = -1 } = req._auth;
+  const posts = await postController.getAllPostsByUser(userId);
+  const locals = { pageTitle: 'Posts', userId, posts, ...req.locals };
+  res.render('index', { locals });
 });
 
 // Sign in
@@ -74,7 +75,7 @@ router
 // Sign out
 router.get('/sign-out', (req, res) => {
   res.clearCookie('token');
-  res.redirect('/');
+  res.redirect('/home');
 });
 
 module.exports = {
