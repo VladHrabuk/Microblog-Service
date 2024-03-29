@@ -1,0 +1,26 @@
+<% if(locals.pageTitle==='Travel Blog' ) { %>
+    <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-700">
+            Showing <%= Math.min((locals.page - 1) * locals.limit + 1, locals.totalCount) %> to
+                <%= Math.min(locals.page * locals.limit, locals.totalCount) %> of <%= locals.totalCount %> Posts
+        </p>
+        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            <a href="<%= `/home?page=${Math.max(1, locals.page - 1)}&limit=${locals.limit}` %>"
+                class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                <%=locals.page===1 ? 'disabled' : '' %>>Previous
+            </a>
+            <% const startPage=Math.max(1, locals.page - 1); %>
+                <% const endPage=Math.min(locals.totalPages, startPage + 2); %>
+                    <% for(let i=startPage; i <=endPage; i++) { %>
+                        <a href="<%= `/home?page=${i}&limit=${locals.limit}` %>"
+                            class="relative inline-flex items-center <%= locals.page === i ? 'bg-indigo-600 text-white' : 'text-gray-900' %> px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                            <%= i %>
+                        </a>
+                        <% } %>
+                            <a href="<%= `/home?page=${Math.min(locals.totalPages, locals.page + 1)}&limit=${locals.limit}` %>"
+                                class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                <%=locals.page===locals.totalPages ? 'disabled' : '' %>>Next
+                            </a>
+        </nav>
+    </div>
+    <%}%>

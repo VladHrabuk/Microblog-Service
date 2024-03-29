@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 const { router: pageRouter } = require('./routes/pages');
 const { router: postRouter } = require('./routes/posts');
 const { jwtParser } = require('./middleware/auth');
@@ -12,6 +13,7 @@ const server = express();
 
 server.use(cors());
 server.use(cookieParser());
+server.use(methodOverride('_method'));
 server.use(express.urlencoded({ extended: false }));
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(express.json());

@@ -1,0 +1,38 @@
+<section class="text-gray-600 body-font relative">
+    <form action="/posts/new" method="POST" class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-12">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Create new Post</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Share your travel experiences and adventures with the
+                world. Write about your favorite destinations, tips for fellow
+                travelers, and memorable moments on the road.</p>
+        </div>
+        <div class="lg:w-1/2 md:w-2/3 mx-auto">
+            <div class="flex flex-wrap justify-end -m-2">
+                <div class="p-2 w-full">
+                    <div class="relative">
+                        <label for="title" class="leading-7 text-sm text-gray-600">Title</label>
+                        <input required type="text" id="title" name="title"
+                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    </div>
+                </div>
+                <div class="p-2 w-full">
+                    <div class="relative">
+                        <label for="description" class="leading-7 text-sm text-gray-600">Description</label>
+                        <textarea required id="description" name="description"
+                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-52 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="p-2">
+                        <a href="/posts"
+                            class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Cancel</a>
+                    </div>
+                    <div class="p-2">
+                        <button type="submit"
+                            class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

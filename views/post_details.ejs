@@ -1,6 +1,5 @@
 <section class="text-gray-600 body-font overflow-hidden">
     <div class="container py-15 mx-auto">
-
         <div class="p-12 flex flex-col items-start">
             <h2 class="sm:text-3xl text-2xl title-font font-medium text-gray-900 mt-4 mb-4">
                 <%= locals.post.title %>
@@ -33,6 +32,17 @@
                     <%= locals.comments.length%>
                 </span>
             </div>
+            <%if(locals.pageTitle==='Delete Post' ) {%>
+                <div class="flex justify-end ml-auto">
+                    <a href="/posts"
+                        class="flex mx-auto mr-3 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Cancel</a>
+                    <form action="/posts/delete/<%=locals.postId%>?_method=DELETE" method="POST">
+                        <button type="submit"
+                            class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Delete
+                            post</button>
+                    </form>
+                </div>
+                <%}%>
         </div>
     </div>
 </section>
