@@ -1,4 +1,5 @@
 const { issueJwt, verifyJwt } = require('../utils/auth');
+const postController = require('../controllers/postController');
 
 function jwtParser(req, res, next) {
   const { token = '' } = req.cookies;
@@ -26,4 +27,18 @@ function tokenSession(req, res, next) {
   return res.redirect('/home');
 }
 
-module.exports = { jwtParser, protectedRoute, tokenSession };
+async function getAccountUsername(req, res, next) {
+  const { userId = -1 } = req._auth;
+  let accountUsername = {};
+  if (userId !== -1) {
+    accountUsername = await postController.getUsername(userId);
+  }
+  req.locals = { accountUsername };
+  next();
+}
+
+module.exports = {
+  getAccountUsername,
+};
+
+module.exports = { jwtParser, protectedRoute, tokenSession, getAccountUsername };

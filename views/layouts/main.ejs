@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> ExploreX | <%= locals.pageTitle %>
     </title>
-    <link href="./css/output.css" rel="stylesheet">
+    <link href="/css/output.css" rel="stylesheet">
 </head>
 
 <body>
     <%- include('../partials/header.ejs') %>
-        <%- include('../partials/static.ejs') %>
-            <main> <%- body %></main>
-            <%- include('../partials/footer.ejs') %>
+        <% if (locals.pageTitle==='Travel Blog' ) { %>
+            <%- include('../partials/static.ejs') %>
+                <% }%>
+                    <main>
+                        <%- body %>
+                    </main>
+                    <%- include('../partials/footer.ejs') %>
 </body>
 
 </html>
