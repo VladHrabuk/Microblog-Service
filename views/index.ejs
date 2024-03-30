@@ -30,8 +30,6 @@
                                         Delete post
                                     </a></div>
                                 <%}%>
-
-
                         </div>
                     </div>
                     <div class="md:flex-grow">
@@ -44,13 +42,7 @@
                             </p>
                             <%}%>
                                 <p class="leading-relaxed">
-                                    Glossier echo park pug, church-key sartorial biodiesel vexillologist pop-up
-                                    snackwave ramps
-                                    cornhole. Marfa 3 wolf moon
-                                    party messenger bag selfies, poke vaporware kombucha lumbersexual pork belly
-                                    polaroid hoodie
-                                    portland craft beer.
-                                    <%= post.content.slice(0, ) %>...
+                                    <%= post.content.slice(0, 250) %>...
                                 </p>
                                 <a href="/posts/<%=post.id%>" class="text-indigo-500 inline-flex items-center mt-4">Read
                                     More

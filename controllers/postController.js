@@ -130,12 +130,47 @@ async function updatePost(postId, title, content) {
 }
 
 async function deletePost(postId) {
-  const post = await prisma.post.delete({
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId,
+    },
+  });
+
+  for (const comment of comments) {
+    await prisma.comment.delete({
+      where: {
+        id: comment.id,
+      },
+    });
+  }
+
+  const deletedPost = await prisma.post.delete({
     where: {
       id: postId,
     },
   });
-  return post;
+
+  return deletedPost;
+}
+
+async function createComment(content, authorId, postId) {
+  const comment = await prisma.comment.create({
+    data: {
+      content,
+      author: { connect: { id: authorId } },
+      post: { connect: { id: postId } },
+    },
+  });
+  return comment;
+}
+
+async function deleteComment(commentId) {
+  const deletedComment = await prisma.comment.delete({
+    where: {
+      id: commentId,
+    },
+  });
+  return deletedComment;
 }
 
 module.exports = {
@@ -148,4 +183,6 @@ module.exports = {
   getAllPostsByUser,
   getUsername,
   paginationPosts,
+  createComment,
+  deleteComment,
 };

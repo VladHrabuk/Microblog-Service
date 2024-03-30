@@ -1,13 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const { getAccountUsername } = require('../middleware/auth');
-const { getPostById, getAllComments, createPost, updatePost, deletePost } = require('../controllers/postController');
+const {
+  getPostById,
+  getAllComments,
+  createPost,
+  updatePost,
+  deletePost,
+  createComment,
+  deleteComment,
+} = require('../controllers/postController');
 
-router.get('/posts/new', getAccountUsername, async (req, res, next) => {
-  const { userId = -1 } = req._auth;
-  const locals = { pageTitle: 'New Post', userId, ...req.locals };
-  res.render('new_post', { locals });
-});
+router
+  .route('/posts/new')
+  .get(getAccountUsername, async (req, res, next) => {
+    const { userId = -1 } = req._auth;
+    const locals = { pageTitle: 'New Post', userId, ...req.locals };
+    res.render('new_post', { locals });
+  })
+  .post(async (req, res, next) => {
+    const { userId = -1 } = req._auth;
+    const { title, description } = req.body;
+    await createPost(title, description, userId);
+    res.redirect('/posts');
+  });
 
 router
   .route('/posts/edit/:postId')
@@ -46,14 +62,21 @@ router
     const postId = req.params.postId;
     const post = await getPostById(postId);
     const comments = await getAllComments(postId);
-    const locals = { pageTitle: 'Post', post, comments, userId, ...req.locals };
+    const locals = { pageTitle: 'Post', post, comments, postId, userId, ...req.locals };
     res.render('post_details', { locals });
   })
   .post(async (req, res, next) => {
     const { userId = -1 } = req._auth;
-    const { title, description } = req.body;
-    await createPost(title, description, userId);
-    res.redirect('/posts');
+    const postId = req.params.postId;
+    const { comment } = req.body;
+    await createComment(comment, userId, postId);
+    res.redirect(`/posts/${postId}`);
+  })
+  .delete(async (req, res, next) => {
+    const postId = req.params.postId;
+    const { commentId } = req.body;
+    await deleteComment(commentId);
+    res.redirect(`/posts/${postId}`);
   });
 
 module.exports = {
