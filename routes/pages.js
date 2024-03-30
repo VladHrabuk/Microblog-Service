@@ -10,7 +10,7 @@ const { SignInErrorHandler, validateSignUpForm } = require('../middleware/userVa
 router.get('/home', getAccountUsername, async (req, res, next) => {
   const { userId = -1 } = req._auth;
   const page = req.query.page ? parseInt(req.query.page) : 1;
-  const limit = 4;
+  const limit = 10;
   const { posts, totalCount } = await postController.paginationPosts(req, page, limit);
   const totalPages = Math.ceil(totalCount / limit);
   const locals = { pageTitle: 'Travel Blog', userId, posts, ...req.locals, page, limit, totalPages, totalCount };
