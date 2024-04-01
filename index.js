@@ -9,6 +9,8 @@ const { router: pageRouter } = require('./routes/pages');
 const { router: postRouter } = require('./routes/posts');
 const { jwtParser } = require('./middleware/auth');
 const path = require('path');
+const errorHandler = require('./middleware/errorHandler');
+const ApiError = require('./exceptions/api-error');
 const server = express();
 
 server.use(cors());
@@ -17,13 +19,20 @@ server.use(methodOverride('_method'));
 server.use(express.urlencoded({ extended: false }));
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(express.json());
-server.use(jwtParser);
 server.use(expressLayouts);
 server.set('layout', './layouts/main');
 server.set('view engine', 'ejs');
 
+server.use(jwtParser);
 server.use('/', pageRouter);
 server.use('/', postRouter);
+
+server.all('*', async (req, res, next) => {
+  const error = ApiError.notFound(); // Create a not found error object
+  next(error);
+});
+
+server.use(errorHandler);
 
 const { port: serverPort } = config.server;
 server.listen(serverPort, () => {

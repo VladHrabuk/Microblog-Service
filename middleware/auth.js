@@ -1,17 +1,23 @@
 const { issueJwt, verifyJwt } = require('../utils/auth');
 const postController = require('../controllers/postController');
+const ApiError = require('../exceptions/api-error');
 
-function jwtParser(req, res, next) {
+async function jwtParser(req, res, next) {
   const { token = '' } = req.cookies;
-  const payload = verifyJwt(token);
-  req._auth = payload;
-  next();
+  try {
+    const payload = verifyJwt(token);
+    req._auth = payload;
+    next();
+  } catch (error) {
+    res.clearCookie('token');
+    res.redirect('/sign-in');
+  }
 }
 
 function protectedRoute(req, res, next) {
   const { token } = req.cookies;
   if (!token) {
-    return res.redirect('/sign-in');
+    return res.status(401).redirect('/sign-in');
   }
   next();
 }
@@ -19,7 +25,7 @@ function protectedRoute(req, res, next) {
 function tokenSession(req, res, next) {
   const { userId } = req._auth || {};
   if (!userId) {
-    return next('Authorizarion error');
+    return next(ApiError.unauthorizedError);
   }
 
   const token = issueJwt({ userId });
@@ -36,9 +42,5 @@ async function getAccountUsername(req, res, next) {
   req.locals = { accountUsername };
   next();
 }
-
-module.exports = {
-  getAccountUsername,
-};
 
 module.exports = { jwtParser, protectedRoute, tokenSession, getAccountUsername };

@@ -5,6 +5,7 @@ const postController = require('../controllers/postController');
 const { hashPassword, checkPassword } = require('../utils/auth');
 const { protectedRoute, tokenSession, getAccountUsername } = require('../middleware/auth');
 const { SignInErrorHandler, validateSignUpForm } = require('../middleware/userValidate');
+const ApiError = require('../exceptions/api-error');
 
 // Authorized/Unauthorized user - main page with all posts
 router.get('/home', getAccountUsername, async (req, res, next) => {
@@ -14,7 +15,11 @@ router.get('/home', getAccountUsername, async (req, res, next) => {
   const { posts, totalCount } = await postController.paginationPosts(req, page, limit);
   const totalPages = Math.ceil(totalCount / limit);
   const locals = { pageTitle: 'Travel Blog', userId, posts, ...req.locals, page, limit, totalPages, totalCount };
-  res.render('index', { locals });
+  if (userId !== -1) {
+    res.render('index', { locals }); // Render page for authorized user
+  } else {
+    res.render('index', { locals }); // Render page for unauthorized user
+  }
 });
 
 // Authorized user - additional page with user's own posts
@@ -39,14 +44,16 @@ router
       const formData = { username, password };
 
       if (!user) {
-        res.locals.errors = { username: { msg: 'User not found' } };
+        const error = ApiError.badRequest('Username not found');
+        res.locals.errors = { username: { msg: error.message } };
         res.locals.formData = formData;
         return next();
       }
 
       const isPassChecked = await checkPassword(password, user.password);
       if (!isPassChecked) {
-        res.locals.errors = { password: { msg: 'Incorrect password' } };
+        const error = ApiError.badRequest('Incorrect password');
+        res.locals.errors = { password: { msg: error.message } };
         res.locals.formData = formData;
         return next();
       }
@@ -73,7 +80,7 @@ router
   });
 
 // Sign out
-router.get('/sign-out', (req, res) => {
+router.get('/sign-out', async (req, res) => {
   res.clearCookie('token');
   res.redirect('/home');
 });
