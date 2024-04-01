@@ -1,5 +1,6 @@
 const { check, validationResult } = require('express-validator');
 const { findUser } = require('../controllers/userController');
+const ApiError = require('../exceptions/api-error');
 
 const SignInErrorHandler = (error, _req, res, _next) => {
   return res.render('sign_in', { pageTitle: 'Sign in', error, layout: false });
@@ -12,13 +13,13 @@ const validateSignUpForm = [
   check('username').custom(async (value) => {
     const user = await findUser({ username: value });
     if (user) {
-      throw new Error('Such username already exists!');
+      throw ApiError.badRequest('Such username already exists!');
     }
     return true;
   }),
   check('password_repeat').custom((value, { req }) => {
     if (value !== req.body.password) {
-      throw new Error("Passwords don't match!");
+      throw ApiError.badRequest("Passwords don't match!");
     }
     return true;
   }),

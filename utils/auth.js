@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const ApiError = require('../exceptions/api-error');
 
 async function hashPassword(plainTextPassword) {
   const salt = await bcrypt.genSalt(10);
@@ -15,22 +16,24 @@ async function checkPassword(plainTextPassword, hashedPassword) {
   }
 }
 
+// Generate jwt
 function issueJwt(dataToSign) {
   return jwt.sign(dataToSign, process.env.SECRET_JWT, { expiresIn: '2h' });
 }
 
 function verifyJwt(token) {
-  let data = {};
+  const data = {};
   if (!token) {
     console.warn('Missing JWT, unauthorized client!');
     return data;
   }
   try {
-    data = jwt.verify(token, process.env.SECRET_JWT);
+    const data = jwt.verify(token, process.env.SECRET_JWT);
+    return data;
   } catch (error) {
     console.error('Invalid JWT!');
+    throw ApiError.unauthorizedError();
   }
-  return data;
 }
 
 module.exports = {
