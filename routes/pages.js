@@ -7,6 +7,10 @@ const { protectedRoute, tokenSession, getAccountUsername } = require('../middlew
 const { SignInErrorHandler, validateSignUpForm } = require('../middleware/userValidate');
 const ApiError = require('../exceptions/api-error');
 
+router.get('/', (req, res, next) => {
+  res.redirect('/home');
+});
+
 // Authorized/Unauthorized user - main page with all posts
 router.get('/home', getAccountUsername, async (req, res, next) => {
   const { userId = -1 } = req._auth;
@@ -15,11 +19,7 @@ router.get('/home', getAccountUsername, async (req, res, next) => {
   const { posts, totalCount } = await postController.paginationPosts(req, page, limit);
   const totalPages = Math.ceil(totalCount / limit);
   const locals = { pageTitle: 'Travel Blog', userId, posts, ...req.locals, page, limit, totalPages, totalCount };
-  if (userId !== -1) {
-    res.render('index', { locals }); // Render page for authorized user
-  } else {
-    res.render('index', { locals }); // Render page for unauthorized user
-  }
+  res.render('index', { locals });
 });
 
 // Authorized user - additional page with user's own posts
