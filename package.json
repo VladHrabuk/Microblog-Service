@@ -10,8 +10,10 @@
     "format:fix": "npx prettier . --write",
     "prepare": "husky install",
     "start:server": "nodemon .",
+    "start": "node .",
     "debug:server": "nodemon --inspect .",
-    "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
+    "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
+    "style:prod": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify"
   },
   "repository": {
     "type": "git",
