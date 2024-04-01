@@ -18,7 +18,7 @@ async function checkPassword(plainTextPassword, hashedPassword) {
 
 // Generate jwt
 function issueJwt(dataToSign) {
-  return jwt.sign(dataToSign, process.env.SECRET_JWT, { expiresIn: '1m' });
+  return jwt.sign(dataToSign, process.env.SECRET_JWT, { expiresIn: '2h' });
 }
 
 function verifyJwt(token) {
