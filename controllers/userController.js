@@ -20,7 +20,20 @@ async function addNewUser({ username, name, password }) {
   return user;
 }
 
+async function getUsername(userId) {
+  const username = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+    select: {
+      username: true,
+    },
+  });
+  return username;
+}
+
 module.exports = {
   findUser,
   addNewUser,
+  getUsername
 };

@@ -91,18 +91,6 @@ async function getAllPostsByUser(userId) {
   return posts;
 }
 
-async function getUsername(userId) {
-  const username = await prisma.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      username: true,
-    },
-  });
-  return username;
-}
-
 async function createPost(title, content, authorId) {
   const post = await prisma.post.create({
     data: {
@@ -181,7 +169,6 @@ module.exports = {
   deletePost,
   getAllComments,
   getAllPostsByUser,
-  getUsername,
   paginationPosts,
   createComment,
   deleteComment,
