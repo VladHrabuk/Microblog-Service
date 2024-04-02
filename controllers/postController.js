@@ -1,7 +1,8 @@
 const prisma = require('../prisma/index');
 
-async function paginationPosts(req, page, limit) {
-  const skip = (page - 1) * limit;
+//! Ideally this method and the next one (getAllPosts) should be just a single method!
+async function getAllPostsByPage(pageSize, limit) {
+  const skip = (pageSize - 1) * limit;
   const posts = await prisma.post.findMany({
     skip,
     take: limit,
@@ -169,7 +170,7 @@ module.exports = {
   deletePost,
   getAllComments,
   getAllPostsByUser,
-  paginationPosts,
+  getAllPostsByPage,
   createComment,
   deleteComment,
 };
