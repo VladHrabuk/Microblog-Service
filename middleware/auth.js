@@ -1,5 +1,5 @@
 const { issueJwt, verifyJwt } = require('../utils/auth');
-const postController = require('../controllers/postController');
+const userController = require('../controllers/userController');
 const ApiError = require('../exceptions/api-error');
 
 async function jwtParser(req, res, next) {
@@ -37,7 +37,7 @@ async function getAccountUsername(req, res, next) {
   const { userId = -1 } = req._auth;
   let accountUsername = {};
   if (userId !== -1) {
-    accountUsername = await postController.getUsername(userId);
+    accountUsername = await userController.getUsername(userId);
   }
   req.locals = { accountUsername };
   next();

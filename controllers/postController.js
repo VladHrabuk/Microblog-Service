@@ -1,6 +1,6 @@
 const prisma = require('../prisma/index');
 
-async function paginationPosts(req, page, limit) {
+async function getAllPostsByPage(page, limit) {
   const skip = (page - 1) * limit;
   const posts = await prisma.post.findMany({
     skip,
@@ -18,22 +18,6 @@ async function paginationPosts(req, page, limit) {
   });
   const totalCount = await prisma.post.count();
   return { posts, totalCount };
-}
-
-async function getAllPosts() {
-  const posts = await prisma.post.findMany({
-    include: {
-      author: {
-        select: {
-          username: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return posts;
 }
 
 async function getPostById(postId) {
@@ -89,18 +73,6 @@ async function getAllPostsByUser(userId) {
     },
   });
   return posts;
-}
-
-async function getUsername(userId) {
-  const username = await prisma.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      username: true,
-    },
-  });
-  return username;
 }
 
 async function createPost(title, content, authorId) {
@@ -174,15 +146,13 @@ async function deleteComment(commentId) {
 }
 
 module.exports = {
-  getAllPosts,
   createPost,
   getPostById,
   updatePost,
   deletePost,
   getAllComments,
   getAllPostsByUser,
-  getUsername,
-  paginationPosts,
+  getAllPostsByPage,
   createComment,
   deleteComment,
 };

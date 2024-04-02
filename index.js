@@ -1,19 +1,21 @@
 require('dotenv').config();
+
 const config = require('config');
 const express = require('express');
-const cors = require('cors');
+const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
+
 const { router: pageRouter } = require('./routes/pages');
 const { router: postRouter } = require('./routes/posts');
 const { jwtParser } = require('./middleware/auth');
-const path = require('path');
+
 const errorHandler = require('./middleware/errorHandler');
 const ApiError = require('./exceptions/api-error');
+
 const server = express();
 
-server.use(cors());
 server.use(cookieParser());
 server.use(methodOverride('_method'));
 server.use(express.urlencoded({ extended: false }));
@@ -28,7 +30,7 @@ server.use('/', pageRouter);
 server.use('/', postRouter);
 
 server.all('*', async (req, res, next) => {
-  const error = ApiError.notFound(); // Create a not found error object
+  const error = ApiError.notFound();
   next(error);
 });
 

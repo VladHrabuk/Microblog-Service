@@ -1,3 +1,4 @@
+const { jwtConfig } = require('config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ApiError = require('../exceptions/api-error');
@@ -18,7 +19,7 @@ async function checkPassword(plainTextPassword, hashedPassword) {
 
 // Generate jwt
 function issueJwt(dataToSign) {
-  return jwt.sign(dataToSign, process.env.SECRET_JWT, { expiresIn: '2h' });
+  return jwt.sign(dataToSign, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
 }
 
 function verifyJwt(token) {
@@ -28,7 +29,7 @@ function verifyJwt(token) {
     return data;
   }
   try {
-    const data = jwt.verify(token, process.env.SECRET_JWT);
+    const data = jwt.verify(token, jwtConfig.secret);
     return data;
   } catch (error) {
     console.error('Invalid JWT!');
