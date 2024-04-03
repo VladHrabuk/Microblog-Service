@@ -43,4 +43,13 @@ async function getAccountUsername(req, res, next) {
   next();
 }
 
-module.exports = { jwtParser, protectedRoute, tokenSession, getAccountUsername };
+//! restrict API access at least this way
+function restrictUnauthAccess(req, resp, next) {
+  if (req._auth.userId <= 0) {
+    return resp.redirect('/sign-in');
+  }
+
+  next();
+}
+
+module.exports = { jwtParser, protectedRoute, tokenSession, getAccountUsername, restrictUnauthAccess };

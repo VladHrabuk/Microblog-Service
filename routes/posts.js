@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAccountUsername } = require('../middleware/auth');
+const { getAccountUsername, restrictUnauthAccess } = require('../middleware/auth');
 const {
   getPostById,
   getAllComments,
@@ -18,7 +18,7 @@ router
     const locals = { pageTitle: 'New Post', userId, ...req.locals };
     res.render('new_post', { locals });
   })
-  .post(async (req, res, next) => {
+  .post(restrictUnauthAccess, async (req, res, next) => {
     const { userId = -1 } = req._auth;
     const { title, description } = req.body;
     await createPost(title, description, userId);
@@ -33,7 +33,7 @@ router
     const locals = { pageTitle: 'Edit Post', post, postId, ...req.locals };
     res.render('update_post', { locals });
   })
-  .put(async (req, res, next) => {
+  .put(restrictUnauthAccess, async (req, res, next) => {
     const postId = req.params.postId;
     const { title, description } = req.body;
     await updatePost(postId, title, description);
@@ -49,7 +49,7 @@ router
     const locals = { pageTitle: 'Delete Post', post, comments, postId, ...req.locals };
     res.render('post_details', { locals });
   })
-  .delete(async (req, res, next) => {
+  .delete(restrictUnauthAccess, async (req, res, next) => {
     const postId = req.params.postId;
     await deletePost(postId);
     res.redirect('/posts');
@@ -65,14 +65,14 @@ router
     const locals = { pageTitle: 'Post', post, comments, postId, userId, ...req.locals };
     res.render('post_details', { locals });
   })
-  .post(async (req, res, next) => {
+  .post(restrictUnauthAccess, async (req, res, next) => {
     const { userId = -1 } = req._auth;
     const postId = req.params.postId;
     const { comment } = req.body;
     await createComment(comment, userId, postId);
     res.redirect(`/posts/${postId}`);
   })
-  .delete(async (req, res, next) => {
+  .delete(restrictUnauthAccess, async (req, res, next) => {
     const postId = req.params.postId;
     const { commentId } = req.body;
     await deleteComment(commentId);
